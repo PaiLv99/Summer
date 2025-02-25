@@ -13,7 +13,7 @@ public class HttpResponse {
     private String head;
     private String body;
 
-    public void setResponseObject(Socket socket) throws IOException {
+    public void setResponseObject(Socket socket) {
 
     }
 }

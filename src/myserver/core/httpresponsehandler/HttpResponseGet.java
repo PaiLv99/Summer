@@ -9,7 +9,7 @@ import java.net.Socket;
 public class HttpResponseGet extends HttpResponse {
 
     @Override
-    public void setResponseObject(Socket socket) throws IOException {
+    public void setResponseObject(Socket socket) {
 
     }
 }

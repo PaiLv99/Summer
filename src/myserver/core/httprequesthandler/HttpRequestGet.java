@@ -8,7 +8,7 @@ import java.net.Socket;
 public class HttpRequestGet extends HttpRequest {
 
     @Override
-    public void setRequestHandler(Socket socket) throws IOException {
+    public void setRequestObject(Socket socket) {
 
     }
 }

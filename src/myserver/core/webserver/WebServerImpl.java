@@ -1,9 +1,11 @@
 package myserver.core.webserver;
 
+import myserver.core.httpenum.HttpMessage;
 import myserver.core.httprequesthandler.HttpRequest;
 import myserver.core.httprequesthandler.HttpRequestHandler;
 import myserver.core.httpresponsehandler.HttpResponse;
-import myserver.core.httpresponsehandler.HttpResponseHandlerManager;
+import myserver.core.httpresponsehandler.HttpResponseHandler;
+import myserver.core.util.Util;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -12,13 +14,13 @@ import java.net.Socket;
 public class WebServerImpl implements WebServer{
 
     private final int port;
-    private final HttpRequestHandler httpRequestHandlerManager;
-    private final HttpResponseHandlerManager httpResponseHandlerManager;
+    private final HttpRequestHandler httpRequestHandler;
+    private final HttpResponseHandler httpResponseHandler;
 
-    public WebServerImpl(int port, HttpRequestHandler httpRequestHandlerManager, HttpResponseHandlerManager httpResponseHandlerManager) {
+    public WebServerImpl(int port, HttpRequestHandler httpRequestHandler, HttpResponseHandler httpResponseHandler) {
         this.port = port;
-        this.httpRequestHandlerManager = httpRequestHandlerManager;
-        this.httpResponseHandlerManager = httpResponseHandlerManager;
+        this.httpRequestHandler = httpRequestHandler;
+        this.httpResponseHandler = httpResponseHandler;
     }
 
     @Override
@@ -27,12 +29,21 @@ public class WebServerImpl implements WebServer{
             while( true ) {
                 Socket clientSocket = serverSocket.accept();
 
-                HttpRequest httpRequestHandler = httpRequestHandlerManager.selectRequestHandler(clientSocket);
-                HttpResponse httpResponseHandler = httpResponseHandlerManager.selectHttpResponseHandler(clientSocket);
+                if( Util.validHttpRequest(clientSocket) != HttpMessage.OK ) {
 
-                // was에 넘기는 로직 필요
+                    HttpResponse httpResponse = httpResponseHandler.createBedResponse(clientSocket);
 
-                clientSocket.close();
+                    clientSocket.close();
+                } else {
+
+                    // was에 넘기는 로직 필요
+
+                    HttpRequest httpRequest = httpRequestHandler.selectRequestHandler(clientSocket);
+                    HttpResponse httpResponse = httpResponseHandler.selectHttpResponseHandler(clientSocket);
+
+                    clientSocket.close();
+                }
+
             }
         } catch ( IOException e ){
             e.printStackTrace();

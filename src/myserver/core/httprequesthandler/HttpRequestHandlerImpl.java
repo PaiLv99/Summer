@@ -9,23 +9,18 @@ import java.util.HashMap;
 
 public class HttpRequestHandlerImpl implements HttpRequestHandler {
 
-    private final Parser parser;
-    private final HashMap<HttpMethod, HttpRequest> httpRequestHandlers;
 
-    public HttpRequestHandlerImpl(Parser parser, HashMap<HttpMethod, HttpRequest> httpRequestHandlers) {
-        this.parser = parser;
-        this.httpRequestHandlers = httpRequestHandlers;
+    private final HttpRequest httpRequest;
+
+    public HttpRequestHandlerImpl(HttpRequest httpRequest) {
+        this.httpRequest = httpRequest;
     }
 
     @Override
-    public HttpRequest selectRequestHandler(Socket socket) throws IOException {
+    public HttpRequest selectRequestHandler(Socket socket) {
 
-        HttpMethod method = parser.parse(socket);
+        httpRequest.setRequestObject(socket);
 
-        HttpRequest httpRequestHandler = httpRequestHandlers.get(method);
-
-        httpRequestHandler.setRequestHandler(socket);
-
-        return httpRequestHandler;
+        return httpRequest;
     }
 }

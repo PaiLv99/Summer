@@ -1,31 +1,38 @@
 package myserver.core.httpresponsehandler;
 
-import myserver.core.httpenum.HttpMethod;
-import myserver.core.parser.Parser;
+import myserver.core.httprequesthandler.HttpRequest;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.HashMap;
 
-public class HttpResponseHandlerImpl implements HttpResponseHandlerManager {
 
-    private final Parser parser;
-    private final HashMap<HttpMethod, HttpResponse> httpResponseHandlers;
+public class HttpResponseHandlerImpl implements HttpResponseHandler {
 
-    public HttpResponseHandlerImpl(Parser parser, HashMap<HttpMethod, HttpResponse> httpResponseHandlers) {
-        this.parser = parser;
-        this.httpResponseHandlers = httpResponseHandlers;
+
+    private final HttpResponse httpResponse;
+
+    public HttpResponseHandlerImpl( HttpResponse httpResponse) {
+
+        this.httpResponse = httpResponse;
     }
 
     @Override
-    public HttpResponse selectHttpResponseHandler(Socket socket) throws IOException {
+    public HttpResponse selectHttpResponseHandler(Socket socket) {
 
-        HttpMethod method = parser.parse(socket);
+        httpResponse.setResponseObject(socket);
 
-        HttpResponse httpResponseHandler = httpResponseHandlers.get(method);
+        return httpResponse;
+    }
 
-        httpResponseHandler.setResponseObject(socket);
+    @Override
+    public HttpResponse createBedResponse(Socket socket) {
+        try(PrintWriter out = new PrintWriter(socket.getOutputStream())){
+            out.write("HTTP/1.1 400 BADREQUEST\r\n");
+        }catch( IOException e ){
+            e.printStackTrace();
+        }
 
-        return httpResponseHandler;
+        return httpResponse;
     }
 }

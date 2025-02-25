@@ -10,13 +10,17 @@ import java.net.Socket;
 public class ParserImpl implements Parser{
     @Override
     public HttpMethod parse(Socket socket) throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-        String line = in.readLine();
-        String[] strings = line.split(" ");
+        String method = HttpMethod.GET.toString();
 
-        // 예외처리...
+        try(BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())) ){
+            String line = in.readLine();
+            String[] strings = line.split(" ");
+            method = strings[0];
+        }catch( IOException e ){
+            e.printStackTrace();
+        }
 
-        return HttpMethod.valueOf(strings[0]);
+        return HttpMethod.valueOf(method);
     }
 }
