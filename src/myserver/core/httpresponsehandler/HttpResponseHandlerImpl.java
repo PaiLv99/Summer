@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.HashMap;
 
-public class HttpResponseHandlerImpl implements HttpResponseHandler {
+public class HttpResponseHandlerImpl implements HttpResponseHandlerManager {
 
     private final Parser parser;
     private final HashMap<HttpMethod, HttpResponse> httpResponseHandlers;

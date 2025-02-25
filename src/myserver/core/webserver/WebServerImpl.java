@@ -3,7 +3,7 @@ package myserver.core.webserver;
 import myserver.core.httprequesthandler.HttpRequest;
 import myserver.core.httprequesthandler.HttpRequestHandler;
 import myserver.core.httpresponsehandler.HttpResponse;
-import myserver.core.httpresponsehandler.HttpResponseHandler;
+import myserver.core.httpresponsehandler.HttpResponseHandlerManager;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -13,9 +13,9 @@ public class WebServerImpl implements WebServer{
 
     private final int port;
     private final HttpRequestHandler httpRequestHandlerManager;
-    private final HttpResponseHandler httpResponseHandlerManager;
+    private final HttpResponseHandlerManager httpResponseHandlerManager;
 
-    public WebServerImpl(int port, HttpRequestHandler httpRequestHandlerManager, HttpResponseHandler httpResponseHandlerManager) {
+    public WebServerImpl(int port, HttpRequestHandler httpRequestHandlerManager, HttpResponseHandlerManager httpResponseHandlerManager) {
         this.port = port;
         this.httpRequestHandlerManager = httpRequestHandlerManager;
         this.httpResponseHandlerManager = httpResponseHandlerManager;

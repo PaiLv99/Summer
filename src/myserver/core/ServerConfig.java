@@ -7,7 +7,7 @@ import myserver.core.httprequesthandler.HttpRequestHandler;
 import myserver.core.httprequesthandler.HttpRequestHandlerImpl;
 import myserver.core.httpresponsehandler.HttpResponseGet;
 import myserver.core.httpresponsehandler.HttpResponse;
-import myserver.core.httpresponsehandler.HttpResponseHandler;
+import myserver.core.httpresponsehandler.HttpResponseHandlerManager;
 import myserver.core.httpresponsehandler.HttpResponseHandlerImpl;
 import myserver.core.parser.Parser;
 import myserver.core.parser.ParserImpl;
@@ -32,7 +32,7 @@ public class ServerConfig {
         return new HttpRequestHandlerImpl(parser(), requestHandlers);
     }
 
-    public HttpResponseHandler httpResponseHandlerManager() {
+    public HttpResponseHandlerManager httpResponseHandlerManager() {
 
         HashMap<HttpMethod, HttpResponse> responseHandlers = new HashMap<>();
 
