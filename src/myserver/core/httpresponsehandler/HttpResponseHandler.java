@@ -4,5 +4,5 @@ import java.net.Socket;
 
 public interface HttpResponseHandler {
     HttpResponse selectHttpResponseHandler(Socket socket);
-    HttpResponse createBedResponse(Socket socket);
+    HttpResponse createBadResponse(Socket socket);
 }

@@ -1,7 +1,5 @@
 package myserver.core.httpresponsehandler;
 
-import myserver.core.httprequesthandler.HttpRequest;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -26,9 +24,12 @@ public class HttpResponseHandlerImpl implements HttpResponseHandler {
     }
 
     @Override
-    public HttpResponse createBedResponse(Socket socket) {
+    public HttpResponse createBadResponse(Socket socket) {
         try(PrintWriter out = new PrintWriter(socket.getOutputStream())){
-            out.write("HTTP/1.1 400 BADREQUEST\r\n");
+            out.write("HTTP/1.1 400 bad request\n");
+            out.write("Content-Type: text/html; charset=UTF-8\n");
+            out.write("Content-Length: 0\n");
+            out.write("Connection: close\n");
         }catch( IOException e ){
             e.printStackTrace();
         }

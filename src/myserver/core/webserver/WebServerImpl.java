@@ -5,7 +5,6 @@ import myserver.core.httprequesthandler.HttpRequest;
 import myserver.core.httprequesthandler.HttpRequestHandler;
 import myserver.core.httpresponsehandler.HttpResponse;
 import myserver.core.httpresponsehandler.HttpResponseHandler;
-import myserver.core.util.Util;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -29,9 +28,9 @@ public class WebServerImpl implements WebServer{
             while( true ) {
                 Socket clientSocket = serverSocket.accept();
 
-                if( Util.validHttpRequest(clientSocket) != HttpMessage.OK ) {
+                if( httpRequestHandler.validHttpRequest(clientSocket) != HttpMessage.OK ) {
 
-                    HttpResponse httpResponse = httpResponseHandler.createBedResponse(clientSocket);
+                    HttpResponse httpResponse = httpResponseHandler.createBadResponse(clientSocket);
 
                     clientSocket.close();
                 } else {

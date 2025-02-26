@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.net.http.HttpHeaders;
 
 public class HttpRequest {
 
@@ -55,27 +56,13 @@ public class HttpRequest {
         this.body = body;
     }
 
-    public void setRequestObject(Socket socket)  {
-        try( BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())) ) {
-
-            String startLine = in.readLine();
-            String[] words = startLine.split(" ");
-
-            method = HttpMethod.valueOf(words[0]);
-            url = words[1];
-            protocolVersion = words[2];
-
-            head = in.readLine();
-
-            // empty line 처리
-            in.readLine();
-
-            if( in.ready() ){
-                body = in.readLine();
-            }
-
-        }catch ( IOException e ){
-            e.printStackTrace();
-        }
+    public void setRequestObject(HttpMethod method, String url, String protocolVersion, String head, String body)  {
+        this.method = method;
+        this.url = url;
+        this.protocolVersion = protocolVersion;
+        this.head = head;
+        this.body = body;
     }
+
+
 }
