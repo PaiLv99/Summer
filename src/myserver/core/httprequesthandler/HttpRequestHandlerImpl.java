@@ -22,7 +22,8 @@ public class HttpRequestHandlerImpl implements HttpRequestHandler {
     @Override
     public HttpRequest selectRequestHandler(Socket socket) {
 
-        try( BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())) ) {
+        try{
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             HttpMethod method;
             String url;
@@ -30,29 +31,30 @@ public class HttpRequestHandlerImpl implements HttpRequestHandler {
             String head;
             String body;
 
-            String startLine = in.readLine();
-            String[] words = startLine.split(" ");
+            if( !isEOF(in) ){
+                String startLine = in.readLine();
+                String[] words = startLine.split(" ");
 
-            method = HttpMethod.valueOf(words[0]);
-            url = words[1];
-            protocolVersion = words[2];
+                method = HttpMethod.valueOf(words[0]);
+                url = words[1];
+                protocolVersion = words[2];
 
-            String line;
-            StringBuilder sb = new StringBuilder();
+                String line;
+                StringBuilder sb = new StringBuilder();
 
-            while( !isEOF(in) && !(line = in.readLine()).isEmpty() ){
-                sb.append(line);
+                while( !isEOF(in) && !(line = in.readLine()).isEmpty() ){
+                    sb.append(line);
+                }
+                head = sb.toString();
+
+                sb = new StringBuilder();
+                while( !isEOF(in) ){
+                    sb.append(in.readLine());
+                }
+                body = sb.toString();
+
+                httpRequest.setRequestObject(method, url, protocolVersion, head, body);
             }
-            head = sb.toString();
-
-            sb = new StringBuilder();
-            while( !isEOF(in) ){
-                sb.append(in.readLine());
-            }
-            body = sb.toString();
-
-            httpRequest.setRequestObject(method, url, protocolVersion, head, body);
-
         }catch ( IOException e ){
             e.printStackTrace();
         }
@@ -61,7 +63,10 @@ public class HttpRequestHandlerImpl implements HttpRequestHandler {
 
     @Override
     public HttpMessage validHttpRequest(Socket socket) {
-        try(BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))){
+        BufferedReader in = null;
+        try{
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
             if( !isEOF(in) ){
                 String line = in.readLine();
                 String[] strings = line.split(" ");
@@ -77,14 +82,14 @@ public class HttpRequestHandlerImpl implements HttpRequestHandler {
             } else {
                 return HttpMessage.BADREQUEST;
             }
-        }catch( IOException e ) {
+        } catch( IOException e ) {
             e.printStackTrace();
         }
 
         return HttpMessage.OK;
     }
 
-    public static boolean isEOF(BufferedReader br) throws IOException {
+    public boolean isEOF(BufferedReader br) throws IOException {
         br.mark(1);
         if( br.read() == -1 ){
             return true;

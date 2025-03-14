@@ -31,18 +31,14 @@ public class WebServerImpl implements WebServer{
                 if( httpRequestHandler.validHttpRequest(clientSocket) != HttpMessage.OK ) {
 
                     HttpResponse httpResponse = httpResponseHandler.createBadResponse(clientSocket);
-
-                    clientSocket.close();
                 } else {
 
                     // was에 넘기는 로직 필요
-
                     HttpRequest httpRequest = httpRequestHandler.selectRequestHandler(clientSocket);
                     HttpResponse httpResponse = httpResponseHandler.selectHttpResponseHandler(clientSocket);
-
-                    clientSocket.close();
                 }
 
+                clientSocket.close();
             }
         } catch ( IOException e ){
             e.printStackTrace();
